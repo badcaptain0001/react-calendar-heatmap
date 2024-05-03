@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rishabhsharma0001/package_test.git"
+    "url": "git+https://github.com/badcaptain0001/react-calendar-heatmap.git"
   },
   "scripts": {
     "dev": "rollup -c --watch",
