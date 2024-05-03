@@ -1405,15 +1405,6 @@ if (process.env.NODE_ENV === 'production') {
 
 var jsxRuntimeExports = jsxRuntime.exports;
 
-const Button = ({ variant, ...props }) => {
-    const colorClass = variant === "primary" ? "blue" : "red";
-    return (jsxRuntimeExports.jsx("button", { style: { backgroundColor: colorClass }, className: `btn ${colorClass}`, ...props, onClick: props.onClick, children: props.children }));
-};
-
-function Input() {
-    return (jsxRuntimeExports.jsx("div", { children: "input" }));
-}
-
 var css_248z = ".tile-chart {\n  display: flex;\n  flex-wrap: wrap;\n}\n\n.month-container {\n  margin: 2px;\n}\n\n.day-tiles {\n  display: grid;\n  grid-template-rows: repeat(7, 1fr);\n  grid-auto-flow: column;\n  grid-gap: 4px;\n}\n\n.day-tile {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: calc(\n    12px - 2px\n  ); /* adjust as needed, subtracting the size of the gap */\n  height: calc(\n    12px - 2px\n  ); /* adjust as needed, subtracting the size of the gap */\n  border-radius: 2px;\n  color: white;\n  font-size: 12px;\n  gap: 2px;\n}\n\n.bg-success {\n  background-color: #9be9a8;\n  border: 1px solid #40c463;\n}\n\n.bg-warning {\n  background-color: #fcd34d;\n  border: 1px solid #f59e0b;\n}\n\n.bg-alert {\n  background-color: #f87171ab;\n  border: 1px solid #f43f5e;\n}\n\n.bg-default {\n  background-color: #ebedf0;\n  color: black;\n  border: 1px solid #1b1f230f;\n}\n\n.month-lable {\n  font-size: 13px;\n}\n\n.popup {\n    position: absolute;\n    background-color: black;\n    border: 1px solid black;\n    border-radius: 7px; /* Adjust the border radius */\n    color: white;\n    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n    z-index: 1000;\n    padding: 5px;\n    text-align: center;\n    font-size: 12px;\n    min-width: 60px;\n    transform: translate(-50%, -100%);\n    transition: top 0.2s ease-in-out, left 0.2s ease-in-out; /* Use the ease-in-out timing function */\n  }";
 styleInject(css_248z);
 
@@ -1524,7 +1515,5 @@ const TileChart = ({ data, range = 6, onTileHover, tileText, }) => {
             }), popup && (jsxRuntimeExports.jsx("div", { className: "popup", style: { position: "fixed", top: popup.y, left: popup.x }, children: tileText ? tileText : popup.content }))] }));
 };
 
-exports.Button = Button;
-exports.Input = Input;
 exports.TileChart = TileChart;
 //# sourceMappingURL=index.js.map
