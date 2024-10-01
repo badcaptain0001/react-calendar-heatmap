@@ -11,7 +11,7 @@ const meta = {
 export default meta;
 
 type Story = StoryObj<typeof meta>;
-const statuses = ["success", "warning", "alert"];
+const statuses = ["success", "warning", "alert" , "holiday", "weekend", "fullDayLeave", "halfDayLeave"];
 const dummyData = [];
 
 for (let month = 0; month < 12; month++) {
@@ -29,7 +29,7 @@ export const Default: Story = {
     args: {
         data: dummyData.map(item => ({ ...item, date: item.date || "", status: item.status as "success" | "warning" | "alert" | undefined })),
         range: 12,
-        onTileHover: (date: string, status: "success" | "warning" | "alert" | undefined) => { 
+        onTileHover: (date: string, status?: "success" | "warning" | "alert" | "holiday" | "weekend" | "fullDayLeave" | "halfDayLeave") => {
             console.log(date, status);
         },
         tileText: 'Attendance Chart'

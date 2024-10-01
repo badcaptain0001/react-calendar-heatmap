@@ -4,12 +4,12 @@ import "./index.css";
 export interface TileChartProps {
   data: {
     date: string;
-    status?: "success" | "warning" | "alert";
+    status?: "success" | "warning" | "alert" | "holiday" | "weekend" | "fullDayLeave" | "halfDayLeave";
   }[];
   range?: 3 | 6 | 12; // Default to 12 months
   onTileHover?: (
     date: string,
-    status?: "success" | "warning" | "alert"
+    status?: "success" | "warning" | "alert" | "holiday" | "weekend" | "fullDayLeave" | "halfDayLeave"
   ) => void;
   tileText?: string;
 }
@@ -35,7 +35,7 @@ const TileChart: React.FC<TileChartProps> = ({
   onTileHover,
   tileText,
 }) => {
-  const getColor = (status?: "success" | "warning" | "alert") => {
+  const getColor = (status?: "success" | "warning" | "alert" | "holiday" | "weekend" | "fullDayLeave" | "halfDayLeave") => {
     switch (status) {
       case "success":
         return "bg-success";
@@ -43,6 +43,14 @@ const TileChart: React.FC<TileChartProps> = ({
         return "bg-warning";
       case "alert":
         return "bg-alert";
+      case "holiday":
+        return "bg-holiday";
+      case "weekend":
+        return "bg-weekend";
+      case "fullDayLeave":
+        return "bg-fullDayLeave";
+      case "halfDayLeave":
+        return "bg-halfDayLeave";
       default:
         return "bg-default";
     }

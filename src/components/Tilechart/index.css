@@ -42,6 +42,22 @@
   background-color: #f87171ab;
   border: 1px solid #f43f5e;
 }
+.bg-holiday {
+  background-color: #69b4ff8a;
+  border: 1px solid #0077cc;
+}
+.bg-weekend{
+  background-color: #c3aed6;
+  border: 1px solid #431a63;
+}
+.bg-fullDayLeave {
+  background-color: #964b009e;
+  border: 1px solid #964b00;
+}
+.bg-halfDayLeave {
+  background-color: #cf04c478;
+  border: 1px solid #cf04c4;
+}
 
 .bg-default {
   background-color: #ebedf0;
