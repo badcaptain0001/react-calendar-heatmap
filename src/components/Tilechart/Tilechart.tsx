@@ -29,6 +29,12 @@ const getFormattedDate = (date: string) => {
   return { year, month, day };
 };
 
+type PopupState = {
+  x: number;
+  y: number;
+  content: string;
+} | null;
+
 const TileChart: React.FC<TileChartProps> = ({
   data,
   range = 6,
@@ -94,15 +100,8 @@ const TileChart: React.FC<TileChartProps> = ({
       currentYear++;
     }
   }
-  const [popup, setPopup] = useState<
-    | {
-        x: number;
-        y: number;
-        content: string;
-      }
-    | any
-  >();
-  const [popupTimeout, setPopupTimeout] = useState<NodeJS.Timeout | any>();
+  const [popup, setPopup] = useState<PopupState>(null);
+  const [popupTimeout, setPopupTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
 
   const handleMouseEnter = (
     event: React.MouseEvent<HTMLDivElement>,
