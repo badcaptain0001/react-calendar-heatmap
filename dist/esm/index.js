@@ -444,7 +444,7 @@ if (process.env.NODE_ENV === 'production') {
 
 var jsxRuntimeExports = jsxRuntime.exports;
 
-var css_248z = ".tile-chart {\n  display: flex;\n  flex-wrap: wrap;\n}\n\n.month-container {\n  margin: 2px;\n}\n\n.day-tiles {\n  display: grid;\n  grid-template-rows: repeat(7, 1fr);\n  grid-auto-flow: column;\n  grid-gap: 4px;\n}\n\n.day-tile {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: calc(\n    12px - 2px\n  ); /* adjust as needed, subtracting the size of the gap */\n  height: calc(\n    12px - 2px\n  ); /* adjust as needed, subtracting the size of the gap */\n  border-radius: 2px;\n  color: white;\n  font-size: 12px;\n  gap: 2px;\n}\n\n.bg-success {\n  background-color: #9be9a8;\n  border: 1px solid #40c463;\n}\n\n.bg-warning {\n  background-color: #fcd34d;\n  border: 1px solid #f59e0b;\n}\n\n.bg-alert {\n  background-color: #f87171ab;\n  border: 1px solid #f43f5e;\n}\n\n.bg-holiday {\n  background-color: #69b4ff8a;\n  border: 1px solid #0077cc;\n}\n\n.bg-weekend{\n  background-color: #c3aed6;\n  border: 1px solid #431a63;\n}\n\n.bg-fullDayLeave {\n  background-color: #964b009e;\n  border: 1px solid #964b00;\n}\n\n.bg-halfDayLeave {\n  background-color: #cf04c478;\n  border: 1px solid #cf04c4;\n}\n\n.bg-default {\n  background-color: #ebedf0;\n  color: black;\n  border: 1px solid #1b1f230f;\n}\n\n.month-lable {\n  font-size: 13px;\n}\n\n.popup {\n    position: absolute;\n    background-color: black;\n    border: 1px solid black;\n    border-radius: 7px; /* Adjust the border radius */\n    color: white;\n    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n    z-index: 1000;\n    padding: 5px;\n    text-align: center;\n    font-size: 12px;\n    min-width: 60px;\n    transform: translate(-50%, -100%);\n    transition: top 0.2s ease-in-out, left 0.2s ease-in-out; /* Use the ease-in-out timing function */\n  }";
+var css_248z = ".tile-chart {\n  display: flex;\n  flex-wrap: wrap;\n}\n\n.month-container {\n  margin: 2px;\n}\n\n.day-tiles {\n  display: grid;\n  grid-template-rows: repeat(7, 1fr);\n  grid-auto-flow: column;\n  grid-gap: 4px;\n}\n\n.day-tile {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: calc(\n    12px - 2px\n  ); /* adjust as needed, subtracting the size of the gap */\n  height: calc(\n    12px - 2px\n  ); /* adjust as needed, subtracting the size of the gap */\n  border-radius: 2px;\n  color: white;\n  font-size: 12px;\n  gap: 2px;\n}\n\n.bg-success {\n  background-color: #9be9a8;\n  border: 1px solid #40c463;\n}\n\n.bg-warning {\n  background-color: #fcd34d;\n  border: 1px solid #f59e0b;\n}\n\n.bg-alert {\n  background-color: #f87171ab;\n  border: 1px solid #f43f5e;\n}\n\n.bg-holiday {\n  background-color: #69b4ff8a;\n  border: 1px solid #0077cc;\n}\n\n.bg-weekend {\n  background-color: #dbdbdb;\n  border: 1px solid #c3c3c3;\n}\n\n.bg-fullDayLeave {\n  background-color: rgb(255 175 175 / 67%);\n  border: 1px solid #f76767ab;\n}\n\n.bg-halfDayLeave {\n  background: linear-gradient(\n    135deg,\n    #9be9a8 0%,\n    #9be9a8 49.9%,\n    #fcd34d 50.1%,\n    #fcd34d 100%\n  );\n  border: 1px solid #40c463;\n}\n\n.bg-halfDayLOP {\n  background-color: #cf04c478;\n  border: 1px solid #cf04c4;\n}\n\n.bg-wfh {\n  background-color: #a78bfa99;\n  border: 1px solid #7c3aed;\n}\n\n/* first half = morning leave, second half = present */\n\n.bg-firstHalfLeave {\n  background: linear-gradient(\n    135deg,\n    #fcd34d 0%,\n    #fcd34d 49.9%,\n    #9be9a8 50.1%,\n    #9be9a8 100%\n  );\n  border: 1px solid #f59e0b;\n}\n\n/* first half = present, second half = afternoon leave */\n\n.bg-secondHalfLeave {\n  background: linear-gradient(\n    135deg,\n    #9be9a8 0%,\n    #9be9a8 49.9%,\n    #fcd34d 50.1%,\n    #fcd34d 100%\n  );\n  border: 1px solid #40c463;\n}\n\n/* first half = morning LOP, second half = present */\n\n.bg-firstHalfLOP {\n  background: linear-gradient(\n    135deg,\n    rgb(255 175 175 / 67%) 0%,\n    rgb(255 175 175 / 67%) 49.9%,\n    #9be9a8 50.1%,\n    #9be9a8 100%\n  );\n  border: 1px solid #f76767ab;\n}\n\n/* first half = present, second half = afternoon LOP */\n\n.bg-secondHalfLOP {\n  background: linear-gradient(\n    135deg,\n    #9be9a8 0%,\n    #9be9a8 49.9%,\n    rgb(255 175 175 / 67%) 50.1%,\n    rgb(255 175 175 / 67%) 100%\n  );\n  border: 1px solid #f76767ab;\n}\n\n.bg-default {\n  background: linear-gradient(45deg, #a9a9a9, #b0b0b0);\n  color: #696969;\n  border: 1px solid #808080;\n}\n\n.month-lable {\n  font-size: 13px;\n}\n\n.popup {\n    position: absolute;\n    background-color: black;\n    border: 1px solid black;\n    border-radius: 7px; /* Adjust the border radius */\n    color: white;\n    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n    z-index: 1000;\n    padding: 5px;\n    text-align: center;\n    font-size: 12px;\n    min-width: 60px;\n    transform: translate(-50%, -100%);\n    transition: top 0.2s ease-in-out, left 0.2s ease-in-out; /* Use the ease-in-out timing function */\n  }";
 styleInject(css_248z);
 
 // Helper function to get the number of days in a month
@@ -477,19 +477,31 @@ const TileChart = ({ data, range = 6, onTileHover, tileText, }) => {
                 return "bg-fullDayLeave";
             case "halfDayLeave":
                 return "bg-halfDayLeave";
+            case "halfDayLOP":
+                return "bg-halfDayLOP";
+            case "wfh":
+                return "bg-wfh";
+            case "firstHalfLeave":
+                return "bg-firstHalfLeave";
+            case "secondHalfLeave":
+                return "bg-secondHalfLeave";
+            case "firstHalfLOP":
+                return "bg-firstHalfLOP";
+            case "secondHalfLOP":
+                return "bg-secondHalfLOP";
             default:
                 return "bg-default";
         }
     };
     const currentDate = new Date();
-    const startMonth = currentDate.getMonth() - range >= 0
-        ? currentDate.getMonth() - range
-        : 12 + currentDate.getMonth() - range;
-    const startYear = currentDate.getMonth() - range >= 0
-        ? currentDate.getFullYear()
-        : currentDate.getFullYear() - 1;
     const endMonth = currentDate.getMonth();
     const endYear = currentDate.getFullYear();
+    let startMonth = endMonth - range;
+    let startYear = endYear;
+    while (startMonth < 0) {
+        startMonth += 12;
+        startYear -= 1;
+    }
     const groupedData = data.reduce((acc, curr) => {
         const formattedDate = getFormattedDate(curr.date);
         const key = `${formattedDate.year}-${formattedDate.month}`;

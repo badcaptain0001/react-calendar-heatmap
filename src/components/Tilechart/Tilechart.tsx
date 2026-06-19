@@ -1,16 +1,28 @@
 import React, { useState } from "react";
 import "./index.css";
 
+export type TileChartStatus =
+  | "success"
+  | "warning"
+  | "alert"
+  | "holiday"
+  | "weekend"
+  | "fullDayLeave"
+  | "halfDayLeave"
+  | "halfDayLOP"
+  | "wfh"
+  | "firstHalfLeave"
+  | "secondHalfLeave"
+  | "firstHalfLOP"
+  | "secondHalfLOP";
+
 export interface TileChartProps {
   data: {
     date: string;
-    status?: "success" | "warning" | "alert" | "holiday" | "weekend" | "fullDayLeave" | "halfDayLeave";
+    status?: TileChartStatus;
   }[];
-  range?: 3 | 6 | 12; // Default to 12 months
-  onTileHover?: (
-    date: string,
-    status?: "success" | "warning" | "alert" | "holiday" | "weekend" | "fullDayLeave" | "halfDayLeave"
-  ) => void;
+  range?: number;
+  onTileHover?: (date: string, status?: TileChartStatus) => void;
   tileText?: string;
 }
 
@@ -41,7 +53,7 @@ const TileChart: React.FC<TileChartProps> = ({
   onTileHover,
   tileText,
 }) => {
-  const getColor = (status?: "success" | "warning" | "alert" | "holiday" | "weekend" | "fullDayLeave" | "halfDayLeave") => {
+  const getColor = (status?: TileChartStatus) => {
     switch (status) {
       case "success":
         return "bg-success";
@@ -57,22 +69,32 @@ const TileChart: React.FC<TileChartProps> = ({
         return "bg-fullDayLeave";
       case "halfDayLeave":
         return "bg-halfDayLeave";
+      case "halfDayLOP":
+        return "bg-halfDayLOP";
+      case "wfh":
+        return "bg-wfh";
+      case "firstHalfLeave":
+        return "bg-firstHalfLeave";
+      case "secondHalfLeave":
+        return "bg-secondHalfLeave";
+      case "firstHalfLOP":
+        return "bg-firstHalfLOP";
+      case "secondHalfLOP":
+        return "bg-secondHalfLOP";
       default:
         return "bg-default";
     }
   };
 
   const currentDate = new Date();
-  const startMonth =
-    currentDate.getMonth() - range >= 0
-      ? currentDate.getMonth() - range
-      : 12 + currentDate.getMonth() - range;
-  const startYear =
-    currentDate.getMonth() - range >= 0
-      ? currentDate.getFullYear()
-      : currentDate.getFullYear() - 1;
   const endMonth = currentDate.getMonth();
   const endYear = currentDate.getFullYear();
+  let startMonth = endMonth - range;
+  let startYear = endYear;
+  while (startMonth < 0) {
+    startMonth += 12;
+    startYear -= 1;
+  }
 
   const groupedData = data.reduce((acc: any, curr: any) => {
     const formattedDate = getFormattedDate(curr.date);
@@ -106,7 +128,7 @@ const TileChart: React.FC<TileChartProps> = ({
   const handleMouseEnter = (
     event: React.MouseEvent<HTMLDivElement>,
     content: string,
-    status?: "success" | "warning" | "alert"
+    status?: TileChartStatus
   ) => {
     if (popupTimeout) clearTimeout(popupTimeout);
     const rect = event.currentTarget.getBoundingClientRect();

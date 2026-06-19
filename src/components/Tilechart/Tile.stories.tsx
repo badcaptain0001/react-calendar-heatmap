@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import TileChart from "./Tilechart";
+import TileChart, { type TileChartStatus } from "./Tilechart";
 
 const meta = {
   title: "UI/TileChart",
@@ -11,13 +11,16 @@ const meta = {
 export default meta;
 
 type Story = StoryObj<typeof meta>;
-const statuses = ["success", "warning", "alert" , "holiday", "weekend", "fullDayLeave", "halfDayLeave"];
+const statuses: TileChartStatus[] = [
+  "success", "warning", "alert", "holiday", "weekend",
+  "fullDayLeave", "halfDayLeave", "halfDayLOP", "wfh",
+  "firstHalfLeave", "secondHalfLeave", "firstHalfLOP", "secondHalfLOP",
+];
 const dummyData = [];
 
 for (let month = 0; month < 12; month++) {
   for (let day = 1; day <= 31; day++) {
     const date = new Date(2024, month, day);
-    // Check if the day is valid for the current month
     if (date.getMonth() === month) {
       const status = statuses[Math.floor(Math.random() * statuses.length)];
       dummyData.push({ date: date.toISOString().split('T')[0], status });
@@ -27,9 +30,9 @@ for (let month = 0; month < 12; month++) {
 
 export const Default: Story = {
     args: {
-        data: dummyData.map(item => ({ ...item, date: item.date || "", status: item.status as "success" | "warning" | "alert" | undefined })),
+        data: dummyData.map(item => ({ ...item, date: item.date || "", status: item.status as TileChartStatus })),
         range: 12,
-        onTileHover: (date: string, status?: "success" | "warning" | "alert" | "holiday" | "weekend" | "fullDayLeave" | "halfDayLeave") => {
+        onTileHover: (date: string, status?: TileChartStatus) => {
             console.log(date, status);
         },
         tileText: 'Attendance Chart'

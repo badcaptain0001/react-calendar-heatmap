@@ -1,12 +1,13 @@
 import React from 'react';
 
+type TileChartStatus = "success" | "warning" | "alert" | "holiday" | "weekend" | "fullDayLeave" | "halfDayLeave" | "halfDayLOP" | "wfh" | "firstHalfLeave" | "secondHalfLeave" | "firstHalfLOP" | "secondHalfLOP";
 interface TileChartProps {
     data: {
         date: string;
-        status?: "success" | "warning" | "alert" | "holiday" | "weekend" | "fullDayLeave" | "halfDayLeave";
+        status?: TileChartStatus;
     }[];
-    range?: 3 | 6 | 12;
-    onTileHover?: (date: string, status?: "success" | "warning" | "alert" | "holiday" | "weekend" | "fullDayLeave" | "halfDayLeave") => void;
+    range?: number;
+    onTileHover?: (date: string, status?: TileChartStatus) => void;
     tileText?: string;
 }
 declare const TileChart: React.FC<TileChartProps>;

@@ -46,23 +46,85 @@
   background-color: #69b4ff8a;
   border: 1px solid #0077cc;
 }
-.bg-weekend{
-  background-color: #c3aed6;
-  border: 1px solid #431a63;
+.bg-weekend {
+  background-color: #dbdbdb;
+  border: 1px solid #c3c3c3;
 }
 .bg-fullDayLeave {
-  background-color: #964b009e;
-  border: 1px solid #964b00;
+  background-color: rgb(255 175 175 / 67%);
+  border: 1px solid #f76767ab;
 }
 .bg-halfDayLeave {
+  background: linear-gradient(
+    135deg,
+    #9be9a8 0%,
+    #9be9a8 49.9%,
+    #fcd34d 50.1%,
+    #fcd34d 100%
+  );
+  border: 1px solid #40c463;
+}
+.bg-halfDayLOP {
   background-color: #cf04c478;
   border: 1px solid #cf04c4;
 }
+.bg-wfh {
+  background-color: #a78bfa99;
+  border: 1px solid #7c3aed;
+}
+
+/* first half = morning leave, second half = present */
+.bg-firstHalfLeave {
+  background: linear-gradient(
+    135deg,
+    #fcd34d 0%,
+    #fcd34d 49.9%,
+    #9be9a8 50.1%,
+    #9be9a8 100%
+  );
+  border: 1px solid #f59e0b;
+}
+
+/* first half = present, second half = afternoon leave */
+.bg-secondHalfLeave {
+  background: linear-gradient(
+    135deg,
+    #9be9a8 0%,
+    #9be9a8 49.9%,
+    #fcd34d 50.1%,
+    #fcd34d 100%
+  );
+  border: 1px solid #40c463;
+}
+
+/* first half = morning LOP, second half = present */
+.bg-firstHalfLOP {
+  background: linear-gradient(
+    135deg,
+    rgb(255 175 175 / 67%) 0%,
+    rgb(255 175 175 / 67%) 49.9%,
+    #9be9a8 50.1%,
+    #9be9a8 100%
+  );
+  border: 1px solid #f76767ab;
+}
+
+/* first half = present, second half = afternoon LOP */
+.bg-secondHalfLOP {
+  background: linear-gradient(
+    135deg,
+    #9be9a8 0%,
+    #9be9a8 49.9%,
+    rgb(255 175 175 / 67%) 50.1%,
+    rgb(255 175 175 / 67%) 100%
+  );
+  border: 1px solid #f76767ab;
+}
 
 .bg-default {
-  background-color: #ebedf0;
-  color: black;
-  border: 1px solid #1b1f230f;
+  background: linear-gradient(45deg, #a9a9a9, #b0b0b0);
+  color: #696969;
+  border: 1px solid #808080;
 }
 
 .month-lable {
