@@ -1,4 +1,4 @@
-import require$$0, { useState } from 'react';
+import require$$0, { useRef, useState, useEffect } from 'react';
 
 function styleInject(css, ref) {
   if ( ref === void 0 ) ref = {};
@@ -444,134 +444,109 @@ if (process.env.NODE_ENV === 'production') {
 
 var jsxRuntimeExports = jsxRuntime.exports;
 
-var css_248z = ".tile-chart {\n  display: flex;\n  flex-wrap: wrap;\n}\n\n.month-container {\n  margin: 2px;\n}\n\n.day-tiles {\n  display: grid;\n  grid-template-rows: repeat(7, 1fr);\n  grid-auto-flow: column;\n  grid-gap: 4px;\n}\n\n.day-tile {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: calc(\n    12px - 2px\n  ); /* adjust as needed, subtracting the size of the gap */\n  height: calc(\n    12px - 2px\n  ); /* adjust as needed, subtracting the size of the gap */\n  border-radius: 2px;\n  color: white;\n  font-size: 12px;\n  gap: 2px;\n}\n\n.bg-success {\n  background-color: #9be9a8;\n  border: 1px solid #40c463;\n}\n\n.bg-warning {\n  background-color: #fcd34d;\n  border: 1px solid #f59e0b;\n}\n\n.bg-alert {\n  background-color: #f87171ab;\n  border: 1px solid #f43f5e;\n}\n\n.bg-holiday {\n  background-color: #69b4ff8a;\n  border: 1px solid #0077cc;\n}\n\n.bg-weekend {\n  background-color: #dbdbdb;\n  border: 1px solid #c3c3c3;\n}\n\n.bg-fullDayLeave {\n  background-color: rgb(255 175 175 / 67%);\n  border: 1px solid #f76767ab;\n}\n\n.bg-halfDayLeave {\n  background: linear-gradient(\n    135deg,\n    #9be9a8 0%,\n    #9be9a8 49.9%,\n    #fcd34d 50.1%,\n    #fcd34d 100%\n  );\n  border: 1px solid #40c463;\n}\n\n.bg-halfDayLOP {\n  background-color: #cf04c478;\n  border: 1px solid #cf04c4;\n}\n\n.bg-wfh {\n  background-color: #a78bfa99;\n  border: 1px solid #7c3aed;\n}\n\n/* first half = morning leave, second half = present */\n\n.bg-firstHalfLeave {\n  background: linear-gradient(\n    135deg,\n    #fcd34d 0%,\n    #fcd34d 49.9%,\n    #9be9a8 50.1%,\n    #9be9a8 100%\n  );\n  border: 1px solid #f59e0b;\n}\n\n/* first half = present, second half = afternoon leave */\n\n.bg-secondHalfLeave {\n  background: linear-gradient(\n    135deg,\n    #9be9a8 0%,\n    #9be9a8 49.9%,\n    #fcd34d 50.1%,\n    #fcd34d 100%\n  );\n  border: 1px solid #40c463;\n}\n\n/* first half = morning LOP, second half = present */\n\n.bg-firstHalfLOP {\n  background: linear-gradient(\n    135deg,\n    rgb(255 175 175 / 67%) 0%,\n    rgb(255 175 175 / 67%) 49.9%,\n    #9be9a8 50.1%,\n    #9be9a8 100%\n  );\n  border: 1px solid #f76767ab;\n}\n\n/* first half = present, second half = afternoon LOP */\n\n.bg-secondHalfLOP {\n  background: linear-gradient(\n    135deg,\n    #9be9a8 0%,\n    #9be9a8 49.9%,\n    rgb(255 175 175 / 67%) 50.1%,\n    rgb(255 175 175 / 67%) 100%\n  );\n  border: 1px solid #f76767ab;\n}\n\n.bg-default {\n  background: linear-gradient(45deg, #a9a9a9, #b0b0b0);\n  color: #696969;\n  border: 1px solid #808080;\n}\n\n.month-lable {\n  font-size: 13px;\n}\n\n.popup {\n    position: absolute;\n    background-color: black;\n    border: 1px solid black;\n    border-radius: 7px; /* Adjust the border radius */\n    color: white;\n    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n    z-index: 1000;\n    padding: 5px;\n    text-align: center;\n    font-size: 12px;\n    min-width: 60px;\n    transform: translate(-50%, -100%);\n    transition: top 0.2s ease-in-out, left 0.2s ease-in-out; /* Use the ease-in-out timing function */\n  }";
+var css_248z = ".tile-chart-wrapper {\n  overflow-x: auto;\n  overflow-y: hidden;\n  width: 100%;\n}\n\n.tile-chart {\n  display: flex;\n  flex-wrap: nowrap;\n  align-items: flex-start;\n  padding-bottom: 4px;\n}\n\n.year-separator {\n  display: flex;\n  flex-direction: column;\n  justify-content: flex-end;\n  align-self: stretch;\n  padding: 0 4px 0 2px;\n  border-left: 1px solid #d0d7de;\n}\n\n.year-label {\n  font-size: 11px;\n  font-weight: 600;\n  color: #57606a;\n  writing-mode: vertical-rl;\n  text-orientation: mixed;\n  transform: rotate(180deg);\n  letter-spacing: 0.5px;\n}\n\n.month-container {\n  margin: 2px;\n}\n\n.day-tiles {\n  display: grid;\n  grid-template-rows: repeat(7, 1fr);\n  grid-auto-flow: column;\n  grid-gap: 4px;\n}\n\n.day-tile {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: calc(\n    12px - 2px\n  ); /* adjust as needed, subtracting the size of the gap */\n  height: calc(\n    12px - 2px\n  ); /* adjust as needed, subtracting the size of the gap */\n  border-radius: 2px;\n  color: white;\n  font-size: 12px;\n  gap: 2px;\n}\n\n.bg-success {\n  background-color: #9be9a8;\n  border: 1px solid #40c463;\n}\n\n.bg-warning {\n  background-color: #fcd34d;\n  border: 1px solid #f59e0b;\n}\n\n.bg-alert {\n  background-color: #f87171ab;\n  border: 1px solid #f43f5e;\n}\n\n.bg-holiday {\n  background-color: #69b4ff8a;\n  border: 1px solid #0077cc;\n}\n\n.bg-weekend {\n  background-color: #dbdbdb;\n  border: 1px solid #c3c3c3;\n}\n\n.bg-fullDayLeave {\n  background-color: rgb(255 175 175 / 67%);\n  border: 1px solid #f76767ab;\n}\n\n.bg-halfDayLeave {\n  background: linear-gradient(\n    135deg,\n    #9be9a8 0%,\n    #9be9a8 49.9%,\n    #fcd34d 50.1%,\n    #fcd34d 100%\n  );\n  border: 1px solid #40c463;\n}\n\n.bg-halfDayLOP {\n  background-color: #cf04c478;\n  border: 1px solid #cf04c4;\n}\n\n.bg-wfh {\n  background-color: #a78bfa99;\n  border: 1px solid #7c3aed;\n}\n\n/* first half = morning leave, second half = present */\n\n.bg-firstHalfLeave {\n  background: linear-gradient(\n    135deg,\n    #fcd34d 0%,\n    #fcd34d 49.9%,\n    #9be9a8 50.1%,\n    #9be9a8 100%\n  );\n  border: 1px solid #f59e0b;\n}\n\n/* first half = present, second half = afternoon leave */\n\n.bg-secondHalfLeave {\n  background: linear-gradient(\n    135deg,\n    #9be9a8 0%,\n    #9be9a8 49.9%,\n    #fcd34d 50.1%,\n    #fcd34d 100%\n  );\n  border: 1px solid #40c463;\n}\n\n/* first half = morning LOP, second half = present */\n\n.bg-firstHalfLOP {\n  background: linear-gradient(\n    135deg,\n    rgb(255 175 175 / 67%) 0%,\n    rgb(255 175 175 / 67%) 49.9%,\n    #9be9a8 50.1%,\n    #9be9a8 100%\n  );\n  border: 1px solid #f76767ab;\n}\n\n/* first half = present, second half = afternoon LOP */\n\n.bg-secondHalfLOP {\n  background: linear-gradient(\n    135deg,\n    #9be9a8 0%,\n    #9be9a8 49.9%,\n    rgb(255 175 175 / 67%) 50.1%,\n    rgb(255 175 175 / 67%) 100%\n  );\n  border: 1px solid #f76767ab;\n}\n\n.bg-default {\n  background: linear-gradient(45deg, #a9a9a9, #b0b0b0);\n  color: #696969;\n  border: 1px solid #808080;\n}\n\n.month-lable {\n  font-size: 13px;\n}\n\n.popup {\n    position: absolute;\n    background-color: black;\n    border: 1px solid black;\n    border-radius: 7px; /* Adjust the border radius */\n    color: white;\n    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);\n    z-index: 1000;\n    padding: 5px;\n    text-align: center;\n    font-size: 12px;\n    min-width: 60px;\n    transform: translate(-50%, -100%);\n    transition: top 0.2s ease-in-out, left 0.2s ease-in-out; /* Use the ease-in-out timing function */\n  }";
 styleInject(css_248z);
 
-// Helper function to get the number of days in a month
-const getDaysInMonth = (year, month) => {
-    return new Date(year, month + 1, 0).getDate();
-};
-// date will come in 2024-04-30T18:35:53.575Z ISO format
-// so we need to filter out all the months and years and days
+const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 const getFormattedDate = (date) => {
     const dateObj = new Date(date);
-    const year = dateObj.getFullYear();
-    const month = dateObj.getMonth(); // Month is zero-based
-    const day = dateObj.getDate();
-    return { year, month, day };
+    return {
+        year: dateObj.getFullYear(),
+        month: dateObj.getMonth(),
+        day: dateObj.getDate(),
+    };
+};
+const getColor = (status) => {
+    switch (status) {
+        case "success": return "bg-success";
+        case "warning": return "bg-warning";
+        case "alert": return "bg-alert";
+        case "holiday": return "bg-holiday";
+        case "weekend": return "bg-weekend";
+        case "fullDayLeave": return "bg-fullDayLeave";
+        case "halfDayLeave": return "bg-halfDayLeave";
+        case "halfDayLOP": return "bg-halfDayLOP";
+        case "wfh": return "bg-wfh";
+        case "firstHalfLeave": return "bg-firstHalfLeave";
+        case "secondHalfLeave": return "bg-secondHalfLeave";
+        case "firstHalfLOP": return "bg-firstHalfLOP";
+        case "secondHalfLOP": return "bg-secondHalfLOP";
+        default: return "bg-default";
+    }
+};
+const getOrdinalSuffix = (day) => {
+    if (day > 3 && day < 21)
+        return "th";
+    switch (day % 10) {
+        case 1: return "st";
+        case 2: return "nd";
+        case 3: return "rd";
+        default: return "th";
+    }
 };
 const TileChart = ({ data, range = 6, onTileHover, tileText, }) => {
-    const getColor = (status) => {
-        switch (status) {
-            case "success":
-                return "bg-success";
-            case "warning":
-                return "bg-warning";
-            case "alert":
-                return "bg-alert";
-            case "holiday":
-                return "bg-holiday";
-            case "weekend":
-                return "bg-weekend";
-            case "fullDayLeave":
-                return "bg-fullDayLeave";
-            case "halfDayLeave":
-                return "bg-halfDayLeave";
-            case "halfDayLOP":
-                return "bg-halfDayLOP";
-            case "wfh":
-                return "bg-wfh";
-            case "firstHalfLeave":
-                return "bg-firstHalfLeave";
-            case "secondHalfLeave":
-                return "bg-secondHalfLeave";
-            case "firstHalfLOP":
-                return "bg-firstHalfLOP";
-            case "secondHalfLOP":
-                return "bg-secondHalfLOP";
-            default:
-                return "bg-default";
-        }
-    };
-    const currentDate = new Date();
-    const endMonth = currentDate.getMonth();
-    const endYear = currentDate.getFullYear();
-    let startMonth = endMonth - range;
-    let startYear = endYear;
-    while (startMonth < 0) {
-        startMonth += 12;
-        startYear -= 1;
-    }
-    const groupedData = data.reduce((acc, curr) => {
-        const formattedDate = getFormattedDate(curr.date);
-        const key = `${formattedDate.year}-${formattedDate.month}`;
-        if (!acc[key]) {
-            acc[key] = [];
-        }
-        acc[key].push({ day: formattedDate.day, status: curr.status });
-        return acc;
-    }, {});
-    const allMonths = [];
-    let currentMonth = startMonth;
-    let currentYear = startYear;
-    while (currentYear < endYear ||
-        (currentYear === endYear && currentMonth <= endMonth)) {
-        const key = `${currentYear}-${currentMonth}`;
-        allMonths.push(key);
-        currentMonth++;
-        if (currentMonth > 11) {
-            currentMonth = 0;
-            currentYear++;
-        }
-    }
+    const scrollRef = useRef(null);
     const [popup, setPopup] = useState(null);
     const [popupTimeout, setPopupTimeout] = useState(null);
+    // Build month window using JS Date auto-wrapping for negative months
+    const today = new Date();
+    const endMonth = today.getMonth();
+    const endYear = today.getFullYear();
+    const startRaw = new Date(today.getFullYear(), today.getMonth() - range, 1);
+    const startMonth = startRaw.getMonth();
+    const startYear = startRaw.getFullYear();
+    // Group data by "YYYY-M" key
+    const groupedData = data.reduce((acc, curr) => {
+        const { year, month, day } = getFormattedDate(curr.date);
+        const key = `${year}-${month}`;
+        if (!acc[key])
+            acc[key] = [];
+        acc[key].push({ day, status: curr.status });
+        return acc;
+    }, {});
+    // Build ordered list of all months in the window
+    const allMonths = [];
+    let cur = new Date(startYear, startMonth, 1);
+    const end = new Date(endYear, endMonth, 1);
+    while (cur <= end) {
+        allMonths.push({ year: cur.getFullYear(), month: cur.getMonth() });
+        cur = new Date(cur.getFullYear(), cur.getMonth() + 1, 1);
+    }
+    // Auto-scroll to the latest (rightmost) month on mount
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+        }
+    }, []);
     const handleMouseEnter = (event, content, status) => {
         if (popupTimeout)
             clearTimeout(popupTimeout);
         const rect = event.currentTarget.getBoundingClientRect();
         setPopupTimeout(setTimeout(() => {
-            setPopup({ x: rect.left, y: rect.top - 3, content }); // Position the popup relative to the element
-            onTileHover && onTileHover(content, status);
-        }, 100)); // Delay before showing the popup
+            setPopup({ x: rect.left, y: rect.top - 3, content });
+            onTileHover?.(content, status);
+        }, 100));
     };
     const handleMouseLeave = () => {
         if (popupTimeout)
             clearTimeout(popupTimeout);
         setPopupTimeout(setTimeout(() => {
             setPopup(null);
-            onTileHover && onTileHover("");
-        }, 100)); // Delay before hiding the popup
+            onTileHover?.("");
+        }, 100));
     };
-    const getOrdinalSuffix = (day) => {
-        if (day > 3 && day < 21)
-            return "th";
-        switch (day % 10) {
-            case 1:
-                return "st";
-            case 2:
-                return "nd";
-            case 3:
-                return "rd";
-            default:
-                return "th";
-        }
-    };
-    return (jsxRuntimeExports.jsxs("div", { className: "tile-chart", children: [allMonths.map((key) => {
-                const [year, month] = key.split("-").map(Number);
-                const daysInMonth = getDaysInMonth(year, month);
-                const monthData = groupedData[key] || [];
-                return (jsxRuntimeExports.jsxs("div", { className: "month-container", children: [jsxRuntimeExports.jsx("span", { className: "month-lable", children: new Date(year, month).toLocaleString("default", {
-                                month: "short",
-                            }) }), jsxRuntimeExports.jsx("div", { className: "day-tiles", children: Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => {
-                                const status = monthData.find((d) => d.day === day)?.status;
-                                const dateObj = new Date(year, month, day);
-                                const date = `${dateObj.getDate()}${getOrdinalSuffix(dateObj.getDate())} ${dateObj.toLocaleString("default", {
-                                    month: "short",
-                                })} ${String(year).slice(-2)}`;
-                                return (jsxRuntimeExports.jsx("div", { className: `day-tile ${getColor(status)}`, onMouseEnter: (event) => handleMouseEnter(event, date, status), onMouseLeave: handleMouseLeave }, day));
-                            }) })] }, key));
-            }), popup && (jsxRuntimeExports.jsx("div", { className: "popup", style: { position: "fixed", top: popup.y, left: popup.x }, children: tileText ? tileText : popup.content }))] }));
+    return (jsxRuntimeExports.jsxs("div", { className: "tile-chart-wrapper", ref: scrollRef, children: [jsxRuntimeExports.jsx("div", { className: "tile-chart", children: allMonths.map(({ year, month }, idx) => {
+                    const key = `${year}-${month}`;
+                    const daysInMonth = getDaysInMonth(year, month);
+                    const monthData = groupedData[key] ?? [];
+                    const isFirstMonthOfYear = month === 0 || idx === 0;
+                    return (jsxRuntimeExports.jsxs(require$$0.Fragment, { children: [isFirstMonthOfYear && (jsxRuntimeExports.jsx("div", { className: "year-separator", children: jsxRuntimeExports.jsx("span", { className: "year-label", children: year }) })), jsxRuntimeExports.jsxs("div", { className: "month-container", children: [jsxRuntimeExports.jsx("span", { className: "month-lable", children: new Date(year, month).toLocaleString("default", { month: "short" }) }), jsxRuntimeExports.jsx("div", { className: "day-tiles", children: Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => {
+                                            const status = monthData.find((d) => d.day === day)?.status;
+                                            const dateObj = new Date(year, month, day);
+                                            const dateLabel = `${dateObj.getDate()}${getOrdinalSuffix(dateObj.getDate())} ${dateObj.toLocaleString("default", { month: "short" })} ${String(year).slice(-2)}`;
+                                            return (jsxRuntimeExports.jsx("div", { className: `day-tile ${getColor(status)}`, onMouseEnter: (e) => handleMouseEnter(e, dateLabel, status), onMouseLeave: handleMouseLeave }, day));
+                                        }) })] })] }, key));
+                }) }), popup && (jsxRuntimeExports.jsx("div", { className: "popup", style: { position: "fixed", top: popup.y, left: popup.x }, children: tileText ? tileText : popup.content }))] }));
 };
 
 export { TileChart };
