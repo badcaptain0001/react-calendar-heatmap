@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./index.css";
 
 export type TileChartStatus =
@@ -26,26 +26,48 @@ export interface TileChartProps {
   tileText?: string;
 }
 
-// Helper function to get the number of days in a month
-const getDaysInMonth = (year: number, month: number) => {
-  return new Date(year, month + 1, 0).getDate();
-};
+const getDaysInMonth = (year: number, month: number) =>
+  new Date(year, month + 1, 0).getDate();
 
-// date will come in 2024-04-30T18:35:53.575Z ISO format
-// so we need to filter out all the months and years and days
 const getFormattedDate = (date: string) => {
   const dateObj = new Date(date);
-  const year = dateObj.getFullYear();
-  const month = dateObj.getMonth(); // Month is zero-based
-  const day = dateObj.getDate();
-  return { year, month, day };
+  return {
+    year: dateObj.getFullYear(),
+    month: dateObj.getMonth(),
+    day: dateObj.getDate(),
+  };
 };
 
-type PopupState = {
-  x: number;
-  y: number;
-  content: string;
-} | null;
+const getColor = (status?: TileChartStatus): string => {
+  switch (status) {
+    case "success":        return "bg-success";
+    case "warning":        return "bg-warning";
+    case "alert":          return "bg-alert";
+    case "holiday":        return "bg-holiday";
+    case "weekend":        return "bg-weekend";
+    case "fullDayLeave":   return "bg-fullDayLeave";
+    case "halfDayLeave":   return "bg-halfDayLeave";
+    case "halfDayLOP":     return "bg-halfDayLOP";
+    case "wfh":            return "bg-wfh";
+    case "firstHalfLeave": return "bg-firstHalfLeave";
+    case "secondHalfLeave":return "bg-secondHalfLeave";
+    case "firstHalfLOP":   return "bg-firstHalfLOP";
+    case "secondHalfLOP":  return "bg-secondHalfLOP";
+    default:               return "bg-default";
+  }
+};
+
+const getOrdinalSuffix = (day: number): string => {
+  if (day > 3 && day < 21) return "th";
+  switch (day % 10) {
+    case 1: return "st";
+    case 2: return "nd";
+    case 3: return "rd";
+    default: return "th";
+  }
+};
+
+type PopupState = { x: number; y: number; content: string } | null;
 
 const TileChart: React.FC<TileChartProps> = ({
   data,
@@ -53,77 +75,42 @@ const TileChart: React.FC<TileChartProps> = ({
   onTileHover,
   tileText,
 }) => {
-  const getColor = (status?: TileChartStatus) => {
-    switch (status) {
-      case "success":
-        return "bg-success";
-      case "warning":
-        return "bg-warning";
-      case "alert":
-        return "bg-alert";
-      case "holiday":
-        return "bg-holiday";
-      case "weekend":
-        return "bg-weekend";
-      case "fullDayLeave":
-        return "bg-fullDayLeave";
-      case "halfDayLeave":
-        return "bg-halfDayLeave";
-      case "halfDayLOP":
-        return "bg-halfDayLOP";
-      case "wfh":
-        return "bg-wfh";
-      case "firstHalfLeave":
-        return "bg-firstHalfLeave";
-      case "secondHalfLeave":
-        return "bg-secondHalfLeave";
-      case "firstHalfLOP":
-        return "bg-firstHalfLOP";
-      case "secondHalfLOP":
-        return "bg-secondHalfLOP";
-      default:
-        return "bg-default";
-    }
-  };
-
-  const currentDate = new Date();
-  const endMonth = currentDate.getMonth();
-  const endYear = currentDate.getFullYear();
-  let startMonth = endMonth - range;
-  let startYear = endYear;
-  while (startMonth < 0) {
-    startMonth += 12;
-    startYear -= 1;
-  }
-
-  const groupedData = data.reduce((acc: any, curr: any) => {
-    const formattedDate = getFormattedDate(curr.date);
-    const key = `${formattedDate.year}-${formattedDate.month}`;
-    if (!acc[key]) {
-      acc[key] = [];
-    }
-    acc[key].push({ day: formattedDate.day, status: curr.status });
-    return acc;
-  }, {} as { [key: string]: { day: number; status?: "success" | "warning" | "alert" }[] });
-
-  const allMonths = [];
-  let currentMonth = startMonth;
-  let currentYear = startYear;
-
-  while (
-    currentYear < endYear ||
-    (currentYear === endYear && currentMonth <= endMonth)
-  ) {
-    const key = `${currentYear}-${currentMonth}`;
-    allMonths.push(key);
-    currentMonth++;
-    if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
-    }
-  }
+  const scrollRef = useRef<HTMLDivElement | null>(null);
   const [popup, setPopup] = useState<PopupState>(null);
   const [popupTimeout, setPopupTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
+
+  // Build month window using JS Date auto-wrapping for negative months
+  const today = new Date();
+  const endMonth = today.getMonth();
+  const endYear = today.getFullYear();
+  const startRaw = new Date(today.getFullYear(), today.getMonth() - range, 1);
+  const startMonth = startRaw.getMonth();
+  const startYear = startRaw.getFullYear();
+
+  // Group data by "YYYY-M" key
+  const groupedData = data.reduce((acc: Record<string, { day: number; status?: TileChartStatus }[]>, curr) => {
+    const { year, month, day } = getFormattedDate(curr.date);
+    const key = `${year}-${month}`;
+    if (!acc[key]) acc[key] = [];
+    acc[key]!.push({ day, status: curr.status });
+    return acc;
+  }, {});
+
+  // Build ordered list of all months in the window
+  const allMonths: { year: number; month: number }[] = [];
+  let cur = new Date(startYear, startMonth, 1);
+  const end = new Date(endYear, endMonth, 1);
+  while (cur <= end) {
+    allMonths.push({ year: cur.getFullYear(), month: cur.getMonth() });
+    cur = new Date(cur.getFullYear(), cur.getMonth() + 1, 1);
+  }
+
+  // Auto-scroll to the latest (rightmost) month on mount
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+    }
+  }, []);
 
   const handleMouseEnter = (
     event: React.MouseEvent<HTMLDivElement>,
@@ -134,10 +121,10 @@ const TileChart: React.FC<TileChartProps> = ({
     const rect = event.currentTarget.getBoundingClientRect();
     setPopupTimeout(
       setTimeout(() => {
-        setPopup({ x: rect.left, y: rect.top - 3, content }); // Position the popup relative to the element
-        onTileHover && onTileHover(content, status);
+        setPopup({ x: rect.left, y: rect.top - 3, content });
+        onTileHover?.(content, status);
       }, 100)
-    ); // Delay before showing the popup
+    );
   };
 
   const handleMouseLeave = () => {
@@ -145,70 +132,53 @@ const TileChart: React.FC<TileChartProps> = ({
     setPopupTimeout(
       setTimeout(() => {
         setPopup(null);
-        onTileHover && onTileHover("");
+        onTileHover?.("");
       }, 100)
-    ); // Delay before hiding the popup
+    );
   };
-  const getOrdinalSuffix = (day: number) => {
-    if (day > 3 && day < 21) return "th";
-    switch (day % 10) {
-      case 1:
-        return "st";
-      case 2:
-        return "nd";
-      case 3:
-        return "rd";
-      default:
-        return "th";
-    }
-  };
-  return (
-    <div className="tile-chart">
-      {allMonths.map((key) => {
-        const [year, month] = key.split("-").map(Number) as [number, number];
-        const daysInMonth = getDaysInMonth(year, month);
-        const monthData = groupedData[key] || [];
 
-        return (
-          <div key={key} className="month-container">
-            <span className="month-lable">
-              {new Date(year, month).toLocaleString("default", {
-                month: "short",
-              })}
-            </span>
-            <div className="day-tiles">
-              {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(
-                (day) => {
-                  const status = monthData.find(
-                    (d: any) => d.day === day
-                  )?.status;
-                  const dateObj = new Date(year, month, day);
-                  const date = `${dateObj.getDate()}${getOrdinalSuffix(
-                    dateObj.getDate()
-                  )} ${dateObj.toLocaleString("default", {
-                    month: "short",
-                  })} ${String(year).slice(-2)}`;
-                  return (
-                    <div
-                      key={day}
-                      className={`day-tile ${getColor(status)}`}
-                      onMouseEnter={(event) =>
-                        handleMouseEnter(event, date, status)
-                      }
-                      onMouseLeave={handleMouseLeave}
-                    ></div>
-                  );
-                }
+  return (
+    <div className="tile-chart-wrapper" ref={scrollRef}>
+      <div className="tile-chart">
+        {allMonths.map(({ year, month }, idx) => {
+          const key = `${year}-${month}`;
+          const daysInMonth = getDaysInMonth(year, month);
+          const monthData = groupedData[key] ?? [];
+          const isFirstMonthOfYear = month === 0 || idx === 0;
+
+          return (
+            <React.Fragment key={key}>
+              {isFirstMonthOfYear && (
+                <div className="year-separator">
+                  <span className="year-label">{year}</span>
+                </div>
               )}
-            </div>
-          </div>
-        );
-      })}
+              <div className="month-container">
+                <span className="month-lable">
+                  {new Date(year, month).toLocaleString("default", { month: "short" })}
+                </span>
+                <div className="day-tiles">
+                  {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => {
+                    const status = monthData.find((d) => d.day === day)?.status;
+                    const dateObj = new Date(year, month, day);
+                    const dateLabel = `${dateObj.getDate()}${getOrdinalSuffix(dateObj.getDate())} ${dateObj.toLocaleString("default", { month: "short" })} ${String(year).slice(-2)}`;
+                    return (
+                      <div
+                        key={day}
+                        className={`day-tile ${getColor(status)}`}
+                        onMouseEnter={(e) => handleMouseEnter(e, dateLabel, status)}
+                        onMouseLeave={handleMouseLeave}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            </React.Fragment>
+          );
+        })}
+      </div>
       {popup && (
-        <div
-          className="popup"
-          style={{ position: "fixed", top: popup.y, left: popup.x }}
-        >
+        <div className="popup" style={{ position: "fixed", top: popup.y, left: popup.x }}>
           {tileText ? tileText : popup.content}
         </div>
       )}

@@ -1,6 +1,33 @@
+.tile-chart-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+}
+
 .tile-chart {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  padding-bottom: 4px;
+}
+
+.year-separator {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-self: stretch;
+  padding: 0 4px 0 2px;
+  border-left: 1px solid #d0d7de;
+}
+
+.year-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #57606a;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  letter-spacing: 0.5px;
 }
 
 .month-container {
